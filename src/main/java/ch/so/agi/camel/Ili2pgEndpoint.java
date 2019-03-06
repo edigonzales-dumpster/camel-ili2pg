@@ -24,7 +24,7 @@ public class Ili2pgEndpoint extends DefaultEndpoint {
     private String dbhost = "localhost";
         
     @UriParam(defaultValue = "5432")
-    private int dbport;
+    private String dbport;
 
     @UriParam @Metadata(required = "true")
     private String dbdatabase;
@@ -106,11 +106,11 @@ public class Ili2pgEndpoint extends DefaultEndpoint {
     /**
      * Die Port-Nummer, unter der die Datenbank angesprochen warden kann. Default ist 5432.
      */
-    public int getDbport() {
+    public String getDbport() {
         return dbport;
     }
 
-    public void setDbport(int dbport) {
+    public void setDbport(String dbport) {
         this.dbport = dbport;
     }
     

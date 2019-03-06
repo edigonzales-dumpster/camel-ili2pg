@@ -8,12 +8,22 @@
   <packaging>jar</packaging>
   <version>0.0.1-SNAPSHOT</version>
 
-  <name>Camel :: Ili2pg</name>
+  <name>Camel :: ili2pg</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
+
+
+  <repositories>
+    <repository>
+      <id>claeis</id>
+      <name>jars.interlis.ch</name>
+      <url>http://jars.interlis.ch</url>
+    </repository>
+  </repositories>
+
 
   <dependencyManagement>
     <dependencies>
@@ -41,6 +51,26 @@
       <version>2.23.1</version>
     </dependency>
     
+    <!-- ili2pg -->
+    <dependency>
+      <groupId>ch.interlis</groupId>
+      <artifactId>ili2pg</artifactId>
+      <version>3.12.2</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.interlis</groupId>
+      <artifactId>ili2db</artifactId>
+      <version>3.12.2</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.ehi</groupId>
+      <artifactId>ehibasics</artifactId>
+      <version>1.2.0</version>
+      <scope>compile</scope>
+    </dependency>
+
     <!-- logging -->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
