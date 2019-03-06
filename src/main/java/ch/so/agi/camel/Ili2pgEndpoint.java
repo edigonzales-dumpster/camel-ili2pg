@@ -23,6 +23,13 @@ public class Ili2pgEndpoint extends DefaultEndpoint {
     @UriParam
     private boolean disableValidation = true; 
     
+    @UriParam(defaultValue = "localhost")
+    private String dbhost = "localhost";
+    
+    @UriParam @Metadata(required = "true")
+    private String dbschema;
+    
+    
     public Ili2pgEndpoint() {
     }
 
@@ -77,5 +84,27 @@ public class Ili2pgEndpoint extends DefaultEndpoint {
     
     public boolean getDisableValidation() {
         return this.disableValidation;
+    }
+    
+    /**
+     * Der hostname der Datenbank.
+     */
+    public String getDbhost() {
+        return dbhost;
+    }
+
+    public void setDbhost(String dbhost) {
+        this.dbhost = dbhost;
+    }
+
+    /**
+     * Definiert den Namen des Datenbank-Schemas.
+     */
+    public String getDbschema() {
+        return dbschema;
+    }
+
+    public void setDbschema(String dbschema) {
+        this.dbschema = dbschema;
     }
 }
