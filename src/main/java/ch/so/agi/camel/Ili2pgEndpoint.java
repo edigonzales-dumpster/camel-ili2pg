@@ -12,23 +12,40 @@ import org.apache.camel.spi.UriPath;
 /**
  * Represents a Ili2pg endpoint.
  */
-@UriEndpoint(firstVersion = "0.0.1-SNAPSHOT", scheme = "ili2pg", title = "Ili2pg", syntax="ili2pg:name", label = "custom")
+@UriEndpoint(firstVersion = "0.0.1-SNAPSHOT", scheme = "ili2pg", title = "Ili2pg", syntax="ili2pg:operation", label = "Interlis")
 public class Ili2pgEndpoint extends DefaultEndpoint {
     @UriPath @Metadata(required = "true")
-    private String name;
+    private String operation;
     
     @UriParam(defaultValue = "10")
     private int option = 10;
-
-    @UriParam
-    private boolean disableValidation = true; 
     
     @UriParam(defaultValue = "localhost")
     private String dbhost = "localhost";
-    
+        
+    @UriParam(defaultValue = "5432")
+    private int dbport;
+
+    @UriParam @Metadata(required = "true")
+    private String dbdatabase;
+
     @UriParam @Metadata(required = "true")
     private String dbschema;
+
+    @UriParam
+    private String dbusr;
+
+    @UriParam
+    private String dbpwd;
     
+    @UriParam(defaultValue = "true")
+    private boolean nameByTopic = true; 
+
+    @UriParam(defaultValue = "true")
+    private boolean strokeArcs = true; 
+
+    @UriParam(defaultValue = "true")
+    private boolean disableValidation = true; 
     
     public Ili2pgEndpoint() {
     }
@@ -51,17 +68,6 @@ public class Ili2pgEndpoint extends DefaultEndpoint {
 
     public boolean isSingleton() {
         return true;
-    }
-
-    /**
-     * Some description of this option, and what it does
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
     }
 
     /**
@@ -96,7 +102,29 @@ public class Ili2pgEndpoint extends DefaultEndpoint {
     public void setDbhost(String dbhost) {
         this.dbhost = dbhost;
     }
+   
+    /**
+     * Die Port-Nummer, unter der die Datenbank angesprochen warden kann. Default ist 5432.
+     */
+    public int getDbport() {
+        return dbport;
+    }
 
+    public void setDbport(int dbport) {
+        this.dbport = dbport;
+    }
+    
+    /**
+     * Der Name der Datenbank.
+     */
+    public String getDbdatabase() {
+        return dbdatabase;
+    }
+
+    public void setDbdatabase(String dbdatabase) {
+        this.dbdatabase = dbdatabase;
+    }
+   
     /**
      * Definiert den Namen des Datenbank-Schemas.
      */
@@ -106,5 +134,62 @@ public class Ili2pgEndpoint extends DefaultEndpoint {
 
     public void setDbschema(String dbschema) {
         this.dbschema = dbschema;
+    }
+    
+    /**
+     * Der Benutzername für den Datenbankzugang und Einträge in Metatabellen.
+     */
+    public String getDbusr() {
+        return dbusr;
+    }
+
+    public void setDbusr(String dbusr) {
+        this.dbusr = dbusr;
+    }
+
+    /**
+     * Das Passwort für den Datenbankzugriff.
+     */
+    public String getDbpwd() {
+        return dbpwd;
+    }
+
+    public void setDbpwd(String dbpwd) {
+        this.dbpwd = dbpwd;
+    }
+
+    /**
+     * Für alle Tabellennamen werden teilweise qualifizierte Interlis-Klassennamen (Topic.Class) verwendet 
+     * (und in einen gültigen Tabellennamen abgebildet).
+     */
+    public boolean isNameByTopic() {
+        return nameByTopic;
+    }
+
+    public void setNameByTopic(boolean nameByTopic) {
+        this.nameByTopic = nameByTopic;
+    }
+
+    /**
+     * Segmentiert Kreisbogen beim Datenimport. Der Radius geht somit verloren. Die Kreisbogen werden so segmentiert, 
+     * dass die Abweichung der erzeugten Geraden kleiner als die Koordinatengenauigkeit der Stützpunkte ist.
+     */
+    public boolean isStrokeArcs() {
+        return strokeArcs;
+    }
+
+    public void setStrokeArcs(boolean strokeArcs) {
+        this.strokeArcs = strokeArcs;
+    }
+
+    /**
+     * Ili2pg-Operation: import/update/replace/delete/export. Default ist import.
+     */
+    public String getOperation() {
+        return operation;
+    }
+
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 }

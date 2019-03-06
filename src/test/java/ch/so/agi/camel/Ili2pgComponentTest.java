@@ -23,7 +23,7 @@ public class Ili2pgComponentTest extends CamelTestSupport {
         return new RouteBuilder() {
             public void configure() {
                 from("direct:ili2pg")
-                .to("ili2pg://bar")
+                .to("ili2pg:foo?dbhost=192.168.50.8")
                 .to("mock:result");
             }
         };

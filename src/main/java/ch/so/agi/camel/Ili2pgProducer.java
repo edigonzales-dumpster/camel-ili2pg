@@ -21,6 +21,10 @@ public class Ili2pgProducer extends DefaultProducer {
     public void process(Exchange exchange) throws Exception {
         System.out.println(exchange.getIn().getBody());    
         
+       
+        LOG.info("*******************3");
+        LOG.info(endpoint.getDbhost());
+        
         LOG.debug("Getting value from exchange");
         //Integer value = exchange.getIn().getBody(Integer.class);
         
