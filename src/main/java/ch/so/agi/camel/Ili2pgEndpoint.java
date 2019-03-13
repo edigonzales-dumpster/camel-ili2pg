@@ -32,10 +32,10 @@ public class Ili2pgEndpoint extends DefaultEndpoint {
     @UriParam @Metadata(required = "true")
     private String dbschema;
 
-    @UriParam
+    @UriParam @Metadata(required = "true")
     private String dbusr;
 
-    @UriParam
+    @UriParam @Metadata(required = "true")
     private String dbpwd;
     
     @UriParam(defaultValue = "true")

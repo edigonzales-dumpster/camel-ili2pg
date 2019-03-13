@@ -11,6 +11,10 @@ public class Ili2pgComponentTest extends CamelTestSupport {
 
     @Test
     public void testIli2pg() throws Exception {
+        // TODO:
+        // - Understand Apache Camel testing.
+        // - Guess I need a running DB.
+        
         MockEndpoint mock = getMockEndpoint("mock:result");
         mock.expectedMinimumMessageCount(1);       
         mock.expectedBodiesReceived(9);
@@ -25,7 +29,7 @@ public class Ili2pgComponentTest extends CamelTestSupport {
         return new RouteBuilder() {
             public void configure() {
                 from("direct:ili2pg")
-                .to("ili2pg:import?dbhost=192.168.50.8")
+                .to("ili2pg:import?dbhost=192.168.50.8&dbport=5432&dbdatabase=pub&dbschema=agi_gb2av&dbusr=ddluser&dbpwd=ddluser")
                 .to("mock:result");
             }
         };
