@@ -6,7 +6,7 @@
   <groupId>ch.so.agi.camel</groupId>
   <artifactId>camel-ili2pg</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.1</version>
 
   <name>Camel :: ili2pg</name>
 
@@ -96,6 +96,14 @@
     </dependency>
   </dependencies>
 
+<distributionManagement>
+    <repository>
+        <id>bintray-sogis-camel-ili2pg</id>
+        <name>sogis-camel-ili2pg</name>
+        <url>https://bintray.com/api/v1/maven/sogis/camel-ili2pg/camel-ili2pg/;publish=1</url>
+    </repository>
+</distributionManagement>
+
   <build>
     <defaultGoal>install</defaultGoal>
 
@@ -165,6 +173,33 @@
           </instructions>
         </configuration>
       </plugin>
+
+    <!-- for bintray deployment -->
+        <plugin>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>2.4.2</version>
+        </plugin>
+    
+        <plugin>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>attach-sources</id>
+                    <phase>package</phase>
+                    <goals><goal>jar-no-fork</goal></goals>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>attach-javadocs</id>
+                    <phase>package</phase>
+                    <goals><goal>jar</goal></goals>
+                </execution>
+            </executions>
+        </plugin>
 
     </plugins>
   </build>

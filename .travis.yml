@@ -1,0 +1,24 @@
+sudo: required
+
+language: java
+
+services:
+  - docker
+
+branches:
+  only:
+    - master
+    - stable
+
+install: true
+
+script:
+  - mvn versions:set -DnewVersion=1.0.$TRAVIS_BUILD_NUMBER
+  - mvn clean package
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: mvn --settings settings.xml deploy
+    on:
+      branch: master
