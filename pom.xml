@@ -6,7 +6,7 @@
   <groupId>ch.so.agi.camel</groupId>
   <artifactId>camel-ili2pg</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.1</version>
+  <version>1.0.LOCALBUILD</version>
 
   <name>Camel :: ili2pg</name>
 
@@ -55,19 +55,38 @@
     <dependency>
       <groupId>ch.interlis</groupId>
       <artifactId>ili2pg</artifactId>
-      <version>3.12.2</version>
+      <version>4.0.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>ch.interlis</groupId>
       <artifactId>ili2db</artifactId>
-      <version>3.12.2</version>
+      <version>4.0.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>ch.ehi</groupId>
       <artifactId>ehibasics</artifactId>
       <version>1.2.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <!-- Because Maven does not like "+" syntax in dependencies -->
+    <dependency>
+      <groupId>ch.interlis</groupId>
+      <artifactId>iox-ili</artifactId>
+      <version>1.20.11-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.interlis</groupId>
+      <artifactId>ili2c-tool</artifactId>
+      <version>5.0.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.ehi</groupId>
+      <artifactId>ehisqlgen</artifactId>
+      <version>1.13.7-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
 
