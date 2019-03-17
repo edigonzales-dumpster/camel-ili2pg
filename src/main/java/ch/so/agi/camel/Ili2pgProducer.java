@@ -63,24 +63,25 @@ public class Ili2pgProducer extends DefaultProducer {
 
         try {
             Ili2db.readSettingsFromDb(settings);
-//            Ili2db.run(settings, null);
+            Ili2db.run(settings, null);
 
-          int value = 3;
-          Integer square = value * value;
-          log.info("The square is " + square);
+            // TODO!!!
+            int value = 3;
+            Integer square = value * value;
+            log.info("The square is " + square);
 
-          if (exchange.getPattern().isOutCapable()) {
-              Message out = exchange.getOut();
-              out.copyFrom(exchange.getIn());
-              out.setBody(square);
-          } else {
-              Message in = exchange.getIn();
-              in.setBody(square);
-          }
+            if (exchange.getPattern().isOutCapable()) {
+                Message out = exchange.getOut();
+                out.copyFrom(exchange.getIn());
+                out.setBody(square);
+            } else {
+                Message in = exchange.getIn();
+                in.setBody(square);
+            }
         } catch (Exception e) {
             log.error("failed to run ili2pg", e);
             log.error(e.getMessage());
-            
+
             throw new Exception(e);
         }
     }
@@ -90,5 +91,4 @@ public class Ili2pgProducer extends DefaultProducer {
         new PgMain().initConfig(settings);
         return settings;
     }
-
 }
