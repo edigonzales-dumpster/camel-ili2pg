@@ -19,6 +19,6 @@ script:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: mvn --settings settings.xml deploy
+    script: mvn --settings settings.xml -Dmaven.test.skip=true deploy
     on:
       branch: master
