@@ -56,6 +56,9 @@ public class Ili2pgProducer extends DefaultProducer {
         if (endpoint.getDisableValidation()) {
             settings.setValidation(endpoint.getDisableValidation());
         }
+        if (endpoint.getDataset() != null) {
+            settings.setDatasetName(endpoint.getDataset());
+        }
         if (Ili2db.isItfFilename(xtfFilename.getAbsolutePath())) {
             settings.setItfTransferfile(true);
         }
