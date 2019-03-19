@@ -47,6 +47,9 @@ public class Ili2pgEndpoint extends DefaultEndpoint {
     @UriParam(defaultValue = "true")
     private boolean disableValidation = true; 
     
+    @UriParam
+    private String dataset; 
+    
     public Ili2pgEndpoint() {
     }
 
@@ -191,5 +194,16 @@ public class Ili2pgEndpoint extends DefaultEndpoint {
 
     public void setOperation(String operation) {
         this.operation = operation;
+    }
+    
+    /**
+     * Name/Identifikator des Datensatzes (Kurzform für mehrere BIDs).
+     */
+    public String getDataset() {
+        return dataset;
+    }
+
+    public void setDataset(String dataset) {
+        this.dataset = dataset;
     }
 }
