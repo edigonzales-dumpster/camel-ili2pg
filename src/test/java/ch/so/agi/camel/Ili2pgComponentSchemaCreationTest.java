@@ -44,10 +44,9 @@ public class Ili2pgComponentSchemaCreationTest extends CamelTestSupport {
         resultEndpoint.expectedMinimumMessageCount(1);  
         
         Exchange exchange = resultEndpoint.getExchanges().get(0);
-        String fileContent = exchange.getIn().getBody(String.class);
+        boolean result = (boolean) exchange.getIn().getHeader("ili2pg");
         
-        assertTrue(fileContent.contains("Info: create table structure, if not existing..."));
-        assertTrue(fileContent.contains("Info: ...done"));
+        assertEquals(true, result);
         
         assertMockEndpointsSatisfied();
         

@@ -22,13 +22,15 @@ public class Ili2pgProducer extends DefaultProducer {
     private static final Logger log = LoggerFactory.getLogger(Ili2pgProducer.class);
     private Ili2pgEndpoint endpoint;
 
+    private final String ILI2PG_HEADER_NAME = "ili2pg";
+    
     public Ili2pgProducer(Ili2pgEndpoint endpoint) {
         super(endpoint);
         this.endpoint = endpoint;
     }
 
     public void process(Exchange exchange) throws Exception {
-        File xtfFilename = exchange.getIn().getBody(File.class);
+        File xtfFile = exchange.getIn().getBody(File.class);
 
         Config settings = createConfig();
        
@@ -62,33 +64,50 @@ public class Ili2pgProducer extends DefaultProducer {
             settings.setModels(endpoint.getModels());
         }
         
-        if (Ili2db.isItfFilename(xtfFilename.getAbsolutePath())) {
+        if (Ili2db.isItfFilename(xtfFile.getAbsolutePath())) {
             settings.setItfTransferfile(true);
         }
-        settings.setXtffile(xtfFilename.getAbsolutePath());
-               
-        Path tempDir = Files.createTempDirectory("ili2pg_camel_");        
-        File logFile = Paths.get(tempDir.toFile().getAbsolutePath(), xtfFilename.getName() + ".log").toFile();
-        settings.setLogfile(logFile.getAbsolutePath());
+        settings.setXtffile(xtfFile.getAbsolutePath());
+          
+        // Different approach can be a directory that can be set with parameter.
+        // But we want to keep the xtf as message body.
+//        Path tempDir = Files.createTempDirectory("ili2pg_camel_");        
+//        File logFile = Paths.get(tempDir.toFile().getAbsolutePath(), xtfFilename.getName() + ".log").toFile();
+//        settings.setLogfile(logFile.getAbsolutePath());
         
         try {
             Ili2db.readSettingsFromDb(settings);
             Ili2db.run(settings, null);
-
+            
             if (exchange.getPattern().isOutCapable()) {
                 Message out = exchange.getOut();
                 out.copyFrom(exchange.getIn());
-                out.setBody(logFile);
-                
+                out.setBody(xtfFile);
+                out.setHeader(ILI2PG_HEADER_NAME, true);
             } else {
                 Message in = exchange.getIn();
-                in.setBody(logFile);
+                in.setBody(xtfFile);
+                in.setHeader(ILI2PG_HEADER_NAME, true);
             }
         } catch (Exception e) {
+            // TODO: better distinguish if it is a ili2pg error?
+            
             log.error("failed to run ili2pg", e);
             log.error(e.getMessage());
 
-            throw new Exception(e);
+            // do not throw error but set the header accordingly.
+//            throw new Exception(e);
+            
+            if (exchange.getPattern().isOutCapable()) {
+                Message out = exchange.getOut();
+                out.copyFrom(exchange.getIn());
+                out.setBody(xtfFile);
+                out.setHeader(ILI2PG_HEADER_NAME, false);
+            } else {
+                Message in = exchange.getIn();
+                in.setBody(xtfFile);
+                in.setHeader(ILI2PG_HEADER_NAME, false);                
+            }
         }
     }
 

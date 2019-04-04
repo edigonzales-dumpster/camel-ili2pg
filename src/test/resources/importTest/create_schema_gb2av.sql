@@ -1,3 +1,4 @@
+DROP SCHEMA IF EXISTS test_dataimport CASCADE;
 CREATE SCHEMA IF NOT EXISTS test_dataimport;
 CREATE SEQUENCE test_dataimport.t_ili2db_seq;;
 -- GB2AV.Flurname

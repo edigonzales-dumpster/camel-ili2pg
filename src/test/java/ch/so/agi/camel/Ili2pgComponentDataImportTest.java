@@ -35,7 +35,7 @@ public class Ili2pgComponentDataImportTest extends CamelTestSupport {
         .waitingFor(Wait.forLogMessage(WAIT_PATTERN, 2));
 
     @Test
-    public void testIli2pg() throws Exception {
+    public void testIli2pgImport_Ok() throws Exception {
         // Prepare database: create schema and tables
         // Executing these queries in the testcontainer init script method is very slow (100s)!?
         File sqlFile = new File("src/test/resources/importTest/create_schema_gb2av.sql");
@@ -54,12 +54,9 @@ public class Ili2pgComponentDataImportTest extends CamelTestSupport {
         resultEndpoint.expectedMinimumMessageCount(1);  
         
         Exchange exchange = resultEndpoint.getExchanges().get(0);
-        String resultFileContent = exchange.getIn().getBody(String.class);
+        boolean result = (boolean) exchange.getIn().getHeader("ili2pg");
         
-        assertTrue(resultFileContent.contains("Info: VOLLZUG_SO0200002401_1531_20180105113131.xml: GB2AV.Vollzugsgegenstaende BID=C1D314519B9042E991E8B5F64F6B7FA9"));
-        assertTrue(resultFileContent.contains("Info:       1 objects in CLASS GB2AV.MutationsNummer"));
-        assertTrue(resultFileContent.contains("Info:       1 objects in CLASS GB2AV.Vollzugsgegenstaende.Vollzugsgegenstand"));
-        assertTrue(resultFileContent.contains("Info: ...import done"));
+        assertEquals(true, result);
         
         assertMockEndpointsSatisfied();
                 
@@ -80,6 +77,31 @@ public class Ili2pgComponentDataImportTest extends CamelTestSupport {
         }
         
         TestUtilSql.closeCon(con);
+    }
+    
+    @Test
+    public void testIli2pgImport_Fail() throws Exception {
+        // Prepare database: create schema and tables
+        // Executing these queries in the testcontainer init script method is very slow (100s)!?
+        File sqlFile = new File("src/test/resources/importTest/create_schema_gb2av.sql");
+        String sqlFileContent = new String(Files.readAllBytes(sqlFile.toPath()));
+        
+        Connection con = TestUtilSql.connectPG(postgres);
+        Statement s1 = con.createStatement();
+        boolean ret = s1.execute(sqlFileContent);
+        con.commit();
+        TestUtilSql.closeCon(con);
+
+        // run test
+        template.sendBody("direct:ili2pg", new File("src/test/data/VOLLZUG_SO0200002401_1531_20180105113131_error.xml"));
+
+        MockEndpoint resultEndpoint = getMockEndpoint("mock:result");
+        resultEndpoint.expectedMinimumMessageCount(1);  
+        
+        Exchange exchange = resultEndpoint.getExchanges().get(0);
+        boolean result = (boolean) exchange.getIn().getHeader("ili2pg");
+        
+        assertEquals(false, result);
     }
 
     @Override
