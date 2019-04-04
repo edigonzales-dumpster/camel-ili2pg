@@ -50,6 +50,9 @@ public class Ili2pgEndpoint extends DefaultEndpoint {
     @UriParam
     private String dataset; 
     
+    @UriParam
+    private String models;
+    
     public Ili2pgEndpoint() {
     }
 
@@ -205,5 +208,16 @@ public class Ili2pgEndpoint extends DefaultEndpoint {
 
     public void setDataset(String dataset) {
         this.dataset = dataset;
+    }
+
+    /**
+     *  Namen des Modells, für das die Tabellenstruktur in der Datenbank erstellt werden soll.
+     */
+    public String getModels() {
+        return models;
+    }
+
+    public void setModels(String models) {
+        this.models = models;
     }
 }

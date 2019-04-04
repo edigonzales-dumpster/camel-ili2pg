@@ -1,6 +1,9 @@
 package ch.so.agi.camel;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -25,26 +28,22 @@ public class Ili2pgProducer extends DefaultProducer {
     }
 
     public void process(Exchange exchange) throws Exception {
-//        Object body = exchange.getIn().getBody();
-//        log.info(body.getClass().toString());
-//        log.info(body.toString());
-//        log.info("***********************");
-
         File xtfFilename = exchange.getIn().getBody(File.class);
 
         Config settings = createConfig();
        
         if (endpoint.getOperation().equalsIgnoreCase("import")) {
             settings.setFunction(Config.FC_IMPORT);
+        } else if (endpoint.getOperation().equalsIgnoreCase("schemaimport")) {
+            settings.setFunction(Config.FC_SCHEMAIMPORT);
         }
-
+       
         settings.setDbhost(endpoint.getDbhost());
         settings.setDbport(endpoint.getDbport());
         settings.setDbdatabase(endpoint.getDbdatabase());
         settings.setDbschema(endpoint.getDbschema()); 
         settings.setDbusr(endpoint.getDbusr());
         settings.setDbpwd(endpoint.getDbpwd());
-
 
         String dburl = "jdbc:postgresql://" + settings.getDbhost() + ":" + settings.getDbport() + "/"
                 + settings.getDbdatabase();
@@ -59,27 +58,31 @@ public class Ili2pgProducer extends DefaultProducer {
         if (endpoint.getDataset() != null) {
             settings.setDatasetName(endpoint.getDataset());
         }
+        if (endpoint.getModels() != null) {
+            settings.setModels(endpoint.getModels());
+        }
+        
         if (Ili2db.isItfFilename(xtfFilename.getAbsolutePath())) {
             settings.setItfTransferfile(true);
         }
         settings.setXtffile(xtfFilename.getAbsolutePath());
-
+               
+        Path tempDir = Files.createTempDirectory("ili2pg_camel_");        
+        File logFile = Paths.get(tempDir.toFile().getAbsolutePath(), xtfFilename.getName() + ".log").toFile();
+        settings.setLogfile(logFile.getAbsolutePath());
+        
         try {
             Ili2db.readSettingsFromDb(settings);
             Ili2db.run(settings, null);
 
-            // TODO!!!
-            int value = 3;
-            Integer square = value * value;
-            log.info("The square is " + square);
-
             if (exchange.getPattern().isOutCapable()) {
                 Message out = exchange.getOut();
                 out.copyFrom(exchange.getIn());
-                out.setBody(square);
+                out.setBody(logFile);
+                
             } else {
                 Message in = exchange.getIn();
-                in.setBody(square);
+                in.setBody(logFile);
             }
         } catch (Exception e) {
             log.error("failed to run ili2pg", e);

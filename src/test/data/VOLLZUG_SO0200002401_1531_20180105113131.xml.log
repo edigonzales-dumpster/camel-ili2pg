@@ -1,0 +1,21 @@
+Info: ili2pg-4.0.0-SNAPSHOT-b877c2ab90c605e5848f1181c9d2edf948cbaddd
+Info: ili2c-5.0.0-20190401
+Info: iox-ili-1.20.11-13a1c5b39c33dae68eca9146e8b26d07cdedfebe
+Info: java.version 1.8.0_181
+Info: user.name <stefan>
+Info: maxMemory 5592576 KB
+Info: currentTime 2019-04-04 11:19:48
+Info: dbschema <test_schemaimport>
+Info: dburl <jdbc:postgresql://localhost:32793/edit>
+Info: dbusr <ddluser>
+Info: databaseProduct <PostgreSQL>
+Info: databaseVersion <10.7 (Debian 10.7-1.pgdg90+1)>
+Info: driverName <PostgreSQL JDBC Driver>
+Info: driverVersion <42.2.5>
+Info: postGISVersion <POSTGIS="2.5.2 r17328" [EXTENSION] PGSQL="100" GEOS="3.5.1-CAPI-1.9.1 r4246" PROJ="Rel. 4.9.3, 15 August 2016" GDAL="GDAL 2.1.2, released 2016/10/24" LIBXML="2.9.4" LIBJSON="0.12.1" LIBPROTOBUF="1.2.1" TOPOLOGY RASTER>
+Info: compile models...
+Info: lookup model <GB2AV> in repository <http://models.interlis.ch/>
+Info: lookup model <GB2AV> in repository <http://models.geo.admin.ch/>
+Info: ilifile </Users/stefan/.ilicache/models.geo.admin.ch/BJ/KS3-20060703.ili>
+Info: create table structure, if not existing...
+Info: ...done
