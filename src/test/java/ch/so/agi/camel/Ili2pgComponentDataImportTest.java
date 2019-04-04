@@ -2,7 +2,6 @@ package ch.so.agi.camel;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -64,7 +63,7 @@ public class Ili2pgComponentDataImportTest extends CamelTestSupport {
         
         assertMockEndpointsSatisfied();
                 
-        // Check schema / table creation.
+        // Check schema and table creation.
         con = TestUtilSql.connectPG(postgres);
         Statement s2 = con.createStatement();
         ResultSet rs2 = s2.executeQuery("SELECT t_datasetname, tagebuchbeleg FROM " + dbschema + ".vollzugsgegnstnde_vollzugsgegenstand");
