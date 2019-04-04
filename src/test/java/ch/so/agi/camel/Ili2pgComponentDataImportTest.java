@@ -38,50 +38,49 @@ public class Ili2pgComponentDataImportTest extends CamelTestSupport {
     @Test
     public void testIli2pg() throws Exception {
         // Prepare database: create schema and tables
-        // Executing these queries in the testcontainer init script is very slow (100s)!?
+        // Executing these queries in the testcontainer init script method is very slow (100s)!?
         File sqlFile = new File("src/test/resources/importTest/create_schema_gb2av.sql");
-        String fileContent = new String(Files.readAllBytes(sqlFile.toPath()));
+        String sqlFileContent = new String(Files.readAllBytes(sqlFile.toPath()));
         
         Connection con = TestUtilSql.connectPG(postgres);
-        Statement s = con.createStatement();
-        boolean ret = s.execute(fileContent);
+        Statement s1 = con.createStatement();
+        boolean ret = s1.execute(sqlFileContent);
         con.commit();
-        
+        TestUtilSql.closeCon(con);
+
         // run test
         template.sendBody("direct:ili2pg", new File("src/test/data/VOLLZUG_SO0200002401_1531_20180105113131.xml"));
 
         MockEndpoint resultEndpoint = getMockEndpoint("mock:result");
         resultEndpoint.expectedMinimumMessageCount(1);  
         
-//        Exchange exchange = resultEndpoint.getExchanges().get(0);
-//        String fileContent = exchange.getIn().getBody(String.class);
-//        
-//        assertTrue(fileContent.contains("Info: create table structure, if not existing..."));
-//        assertTrue(fileContent.contains("Info: ...done"));
+        Exchange exchange = resultEndpoint.getExchanges().get(0);
+        String resultFileContent = exchange.getIn().getBody(String.class);
+        
+        assertTrue(resultFileContent.contains("Info: VOLLZUG_SO0200002401_1531_20180105113131.xml: GB2AV.Vollzugsgegenstaende BID=C1D314519B9042E991E8B5F64F6B7FA9"));
+        assertTrue(resultFileContent.contains("Info:       1 objects in CLASS GB2AV.MutationsNummer"));
+        assertTrue(resultFileContent.contains("Info:       1 objects in CLASS GB2AV.Vollzugsgegenstaende.Vollzugsgegenstand"));
+        assertTrue(resultFileContent.contains("Info: ...import done"));
         
         assertMockEndpointsSatisfied();
-        
-//        Info: VOLLZUG_SO0200002401_1531_20180105113131.xml: GB2AV.Vollzugsgegenstaende BID=C1D314519B9042E991E8B5F64F6B7FA9
-//                Info:       1 objects in CLASS GB2AV.MutationsNummer
-//                Info:       1 objects in CLASS GB2AV.Vollzugsgegenstaende.Vollzugsgegenstand
-//                Info: ...import done
-        
+                
         // Check schema / table creation.
-//        Connection con = TestUtilSql.connectPG(postgres);
-//        Statement s = con.createStatement();
-//        ResultSet rs = s.executeQuery("SELECT content FROM " + dbschema + ".t_ili2db_model");
-//        
-//        if(!rs.next()) {
-//            fail();
-//        }
-//
-//        assertTrue(rs.getString(1).contains("INTERLIS 2.2;"));
-//        
-//        if(rs.next()) {
-//            fail();
-//        }
-//        
-//        TestUtilSql.closeCon(con);
+        con = TestUtilSql.connectPG(postgres);
+        Statement s2 = con.createStatement();
+        ResultSet rs2 = s2.executeQuery("SELECT t_datasetname, tagebuchbeleg FROM " + dbschema + ".vollzugsgegnstnde_vollzugsgegenstand");
+        
+        if(!rs2.next()) {
+            fail();
+        }
+
+        assertTrue(rs2.getString(1).contains("VOLLZUG_SO0200002401_1531_20180105113131"));
+        assertTrue(rs2.getString(2).contains("006-2017/2145/0"));
+        
+        if(rs2.next()) {
+            fail();
+        }
+        
+        TestUtilSql.closeCon(con);
     }
 
     @Override
