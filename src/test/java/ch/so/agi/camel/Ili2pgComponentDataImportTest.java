@@ -73,8 +73,8 @@ public class Ili2pgComponentDataImportTest extends CamelTestSupport {
             fail();
         }
 
-        assertTrue(rs2.getString(1).contains("VOLLZUG_SO0200002401_1531_20180105113131"));
-        assertTrue(rs2.getString(2).contains("006-2017/2145/0"));
+        assertTrue(rs2.getString(1).equals("VOLLZUG_SO0200002401_1531_20180105113131"));
+        assertTrue(rs2.getString(2).equals("006-2017/2145/0"));
         
         if(rs2.next()) {
             fail();
