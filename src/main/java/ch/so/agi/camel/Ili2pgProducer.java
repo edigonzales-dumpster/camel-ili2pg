@@ -55,7 +55,7 @@ public class Ili2pgProducer extends DefaultProducer {
             settings.setNameOptimization(settings.NAME_OPTIMIZATION_TOPIC);
         }
         if (endpoint.getDisableValidation()) {
-            settings.setValidation(endpoint.getDisableValidation());
+            settings.setValidation(false);
         }
         if (endpoint.getDataset() != null) {
             settings.setDatasetName(endpoint.getDataset());
