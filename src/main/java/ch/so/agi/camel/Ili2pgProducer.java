@@ -38,7 +38,13 @@ public class Ili2pgProducer extends DefaultProducer {
             settings.setFunction(Config.FC_IMPORT);
         } else if (endpoint.getOperation().equalsIgnoreCase("schemaimport")) {
             settings.setFunction(Config.FC_SCHEMAIMPORT);
-        }
+        } else if (endpoint.getOperation().equalsIgnoreCase("replace")) {
+            settings.setFunction(Config.FC_REPLACE);
+            
+            if (endpoint.getDataset() == null) {
+                throw new Exception("dataset must not be null");
+            }
+        } 
        
         settings.setDbhost(endpoint.getDbhost());
         settings.setDbport(endpoint.getDbport());
