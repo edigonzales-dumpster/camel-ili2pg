@@ -18,6 +18,12 @@
 
   <repositories>
     <repository>
+      <id>bintray-sogis-ili2pg</id>
+      <name>bintray</name>
+      <url>https://dl.bintray.com/sogis/ili2pg</url>
+    </repository>
+  
+    <repository>
       <id>claeis</id>
       <name>jars.interlis.ch</name>
       <url>http://jars.interlis.ch</url>
@@ -55,18 +61,18 @@
     <dependency>
       <groupId>ch.interlis</groupId>
       <artifactId>ili2pg</artifactId>
-      <version>4.0.0-SNAPSHOT</version>
+      <version>4.0.0</version>
       <scope>compile</scope>
     </dependency>
-    <!-- 
     
+    <!-- 
     <dependency>
       <groupId>ch.interlis</groupId>
       <artifactId>ili2db</artifactId>
-      <version>4.0.0-SNAPSHOT</version>
+      <version>4.0.0</version>
       <scope>compile</scope>
     </dependency>
-    -->
+    --> 
     
     <dependency>
       <groupId>ch.ehi</groupId>
