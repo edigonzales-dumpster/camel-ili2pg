@@ -42,12 +42,7 @@ public class Ili2pgComponentSchemaCreationTest extends CamelTestSupport {
 
         MockEndpoint resultEndpoint = getMockEndpoint("mock:result");
         resultEndpoint.expectedMinimumMessageCount(1);  
-        
-        Exchange exchange = resultEndpoint.getExchanges().get(0);
-        boolean result = (boolean) exchange.getIn().getHeader("ili2pg");
-        
-        assertEquals(true, result);
-        
+                
         assertMockEndpointsSatisfied();
         
         // Check schema / table creation.

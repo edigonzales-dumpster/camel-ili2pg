@@ -53,11 +53,6 @@ public class Ili2pgComponentDataImportTest extends CamelTestSupport {
         MockEndpoint resultEndpoint = getMockEndpoint("mock:result");
         resultEndpoint.expectedMinimumMessageCount(1);  
         
-        Exchange exchange = resultEndpoint.getExchanges().get(0);
-        boolean result = (boolean) exchange.getIn().getHeader("ili2pg");
-        
-        assertEquals(true, result);
-        
         assertMockEndpointsSatisfied();
                 
         // Check schema and table creation.
@@ -93,15 +88,14 @@ public class Ili2pgComponentDataImportTest extends CamelTestSupport {
         TestUtilSql.closeCon(con);
 
         // run test
-        template.sendBody("direct:ili2pg", new File("src/test/data/VOLLZUG_SO0200002401_1531_20180105113131_error.xml"));
+        try {
+            template.sendBody("direct:ili2pg", new File("src/test/data/VOLLZUG_SO0200002401_1531_20180105113131_error.xml"));
+        } catch (Exception e) {            
+            assertTrue(e.getCause().toString().contains("java.lang.NullPointerException"));
+        }
 
         MockEndpoint resultEndpoint = getMockEndpoint("mock:result");
         resultEndpoint.expectedMinimumMessageCount(1);  
-        
-        Exchange exchange = resultEndpoint.getExchanges().get(0);
-        boolean result = (boolean) exchange.getIn().getHeader("ili2pg");
-        
-        assertEquals(false, result);
     }
 
     @Override

@@ -89,31 +89,29 @@ public class Ili2pgProducer extends DefaultProducer {
                 Message out = exchange.getOut();
                 out.copyFrom(exchange.getIn());
                 out.setBody(xtfFile);
-                out.setHeader(ILI2PG_HEADER_NAME, true);
             } else {
                 Message in = exchange.getIn();
                 in.setBody(xtfFile);
-                in.setHeader(ILI2PG_HEADER_NAME, true);
             }
         } catch (Exception e) {
-            // TODO: better distinguish if it is a ili2pg error?
-            
             log.error("failed to run ili2pg", e);
             log.error(e.getMessage());
 
-            // do not throw error but set the header accordingly.
-//            throw new Exception(e);
+            throw new Exception(e);
             
-            if (exchange.getPattern().isOutCapable()) {
-                Message out = exchange.getOut();
-                out.copyFrom(exchange.getIn());
-                out.setBody(xtfFile);
-                out.setHeader(ILI2PG_HEADER_NAME, false);
-            } else {
-                Message in = exchange.getIn();
-                in.setBody(xtfFile);
-                in.setHeader(ILI2PG_HEADER_NAME, false);                
-            }
+//            // do not throw error but set the header accordingly.
+////            throw new Exception(e);
+//            
+//            if (exchange.getPattern().isOutCapable()) {
+//                Message out = exchange.getOut();
+//                out.copyFrom(exchange.getIn());
+//                out.setBody(xtfFile);
+//                out.setHeader(ILI2PG_HEADER_NAME, false);
+//            } else {
+//                Message in = exchange.getIn();
+//                in.setBody(xtfFile);
+//                in.setHeader(ILI2PG_HEADER_NAME, false);                
+//            }
         }
     }
 
