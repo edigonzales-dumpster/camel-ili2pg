@@ -34,10 +34,7 @@ public class Ili2pgComponentSchemaCreationTest extends CamelTestSupport {
         .waitingFor(Wait.forLogMessage(WAIT_PATTERN, 2));
 
     @Test
-    public void testIli2pg() throws Exception {
-        // TODO:
-        // - Understand Apache Camel testing.
-        
+    public void testIli2pg() throws Exception {        
         template.sendBody("direct:ili2pg", new File("src/test/data/VOLLZUG_SO0200002401_1531_20180105113131.xml"));
 
         MockEndpoint resultEndpoint = getMockEndpoint("mock:result");
